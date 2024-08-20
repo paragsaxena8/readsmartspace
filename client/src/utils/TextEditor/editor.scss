@@ -1,0 +1,244 @@
+:root {
+    --black: #2E2B29;
+    --black-contrast: #110F0E;
+    --gray-1: rgba(61, 37, 20, .05);
+    --gray-2: rgba(61, 37, 20, .08);
+    --gray-3: rgba(61, 37, 20, .12);
+    --gray-4: rgba(53, 38, 28, .3);
+    --gray-5: rgba(28, 25, 23, .6);
+    --green: #22C55E;
+    --purple: #6A00F5;
+    --purple-contrast: #5800CC;
+    --purple-light: rgba(88, 5, 255, .05);
+    --yellow-contrast: #FACC15;
+    --yellow: rgba(250, 204, 21, .4);
+    --yellow-light: #FFFAE5;
+    --white: #FFF;
+    --red: #FF5C33;
+    --red-light: #FFEBE5;
+    --shadow: 0px 12px 33px 0px rgba(0, 0, 0, .06), 0px 3.618px 9.949px 0px rgba(0, 0, 0, .04)
+    --shadow-2: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+
+*,
+*:before,
+*:after {
+    box-sizing: border-box
+}
+
+.boxShadow {
+    box-shadow: var(--shadow-2);
+}
+
+:first-child {
+    margin-top: 0
+}
+
+.tiptap {
+    margin: 0.5rem 0px;
+}
+
+.tiptap:focus {
+    outline: none;
+}
+
+.ProseMirror {
+    min-height: 200px;
+
+    &>* {
+        &+* {
+            margin-top: 0.75em;
+        }
+    }
+
+    code {
+        background-color: rgba(#616161, 0.1);
+        color: #616161;
+    }
+
+    pre {
+        background: #0D0D0D;
+        color: #FFF;
+        font-family: 'JetBrainsMono', monospace;
+        padding: 0.75rem 1rem;
+        border-radius: 0.5rem;
+
+        code {
+            color: inherit;
+            padding: 0;
+            background: none;
+            font-size: 0.8rem;
+        }
+    }
+
+    img {
+        max-width: 100%;
+        height: auto;
+    }
+
+    blockquote {
+        padding-left: 1rem;
+        border-left: 2px solid rgba(#0D0D0D, 0.1);
+    }
+
+    hr {
+        border: none;
+        border-top: 2px solid rgba(#0D0D0D, 0.1);
+        margin: 2rem 0;
+    }
+
+    ul[data-type=taskList] {
+        list-style: none;
+        padding: 0;
+
+        li {
+            display: flex;
+            align-items: center;
+        }
+    }
+
+    & ul,
+    & ol {
+        padding: 0 1rem;
+
+        & li {
+            margin-bottom: 2px;
+
+            & p {
+                margin: 0;
+            }
+
+            & label {
+                margin-right: 3px;
+            }
+        }
+
+
+    }
+
+    & h1,
+    & h2,
+    & h3,
+    & h4,
+    & h5,
+    & h6 {
+        line-height: 1.1;
+    }
+
+}
+
+button,
+input,
+select,
+textarea {
+    background: var(--gray-2);
+    border-radius: .45rem;
+    border: none;
+    color: var(--black);
+    font-family: inherit;
+    font-size: .875rem;
+    font-weight: 500;
+    line-height: 1.15;
+    margin: 0 4px;
+    padding: .375rem .625rem;
+    transition: all .2s cubic-bezier(.65, .05, .36, 1)
+}
+
+button:hover,
+input:hover,
+select:hover,
+textarea:hover {
+    background-color: var(--gray-3);
+    color: var(--black-contrast)
+}
+
+button[disabled],
+input[disabled],
+select[disabled],
+textarea[disabled] {
+    background: var(--gray-1);
+    color: var(--gray-4)
+}
+
+button:checked,
+input:checked,
+select:checked,
+textarea:checked {
+    accent-color: var(--purple)
+}
+
+button.primary,
+input.primary,
+select.primary,
+textarea.primary {
+    background: var(--black);
+    color: var(--white)
+}
+
+button.primary:hover,
+input.primary:hover,
+select.primary:hover,
+textarea.primary:hover {
+    background-color: var(--black-contrast)
+}
+
+button.primary[disabled],
+input.primary[disabled],
+select.primary[disabled],
+textarea.primary[disabled] {
+    background: var(--gray-1);
+    color: var(--gray-4)
+}
+
+button.is-active,
+input.is-active,
+select.is-active,
+textarea.is-active {
+    background: var(--purple);
+    color: var(--white)
+}
+
+button.is-active:hover,
+input.is-active:hover,
+select.is-active:hover,
+textarea.is-active:hover {
+    background-color: var(--purple-contrast);
+    color: var(--white)
+}
+
+button:not([disabled]),
+select:not([disabled]) {
+    cursor: pointer
+}
+
+input[type=text],
+textarea {
+    background-color: unset;
+    border: 1px solid var(--gray-3);
+    border-radius: .5rem;
+    color: var(--black)
+}
+
+input[type=text]::-moz-placeholder,
+textarea::-moz-placeholder {
+    color: var(--gray-4)
+}
+
+input[type=text]::placeholder,
+textarea::placeholder {
+    color: var(--gray-4)
+}
+
+input[type=text]:hover,
+textarea:hover {
+    background-color: unset;
+    border-color: var(--gray-4)
+}
+
+input[type=text]:focus-visible,
+input[type=text]:focus,
+textarea:focus-visible,
+textarea:focus {
+    border-color: var(--purple);
+    outline: none;
+}
