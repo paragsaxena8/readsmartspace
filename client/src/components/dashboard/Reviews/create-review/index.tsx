@@ -18,15 +18,17 @@ export const CreateReview: FC = () => {
     form.setFieldsValue({
       bookId: bookId,
       title: "Test",
-      content: editorContent,
+      reviewText: editorContent,
       rating: 0,
-      recommand: false,
+      recommended: false,
     });
-  }, [form, editorContent, bookId]);
+  }, [form, bookId]);
   const editorsData = (data: any) => {
     // console.log("🚀 ~ editorsData ~ data:", data);
     setEditorContent(data.content);
   };
+
+  useEffect(() => {}, []);
 
   const onFinish = (values: any) => {
     console.log("🚀 ~ values:", values);
@@ -36,92 +38,100 @@ export const CreateReview: FC = () => {
     // console.log("🚀 ~ searchOutput ~ value:", val);
     const { value, label } = JSON.parse(val || "{}");
     setBookName(label);
-    form.setFieldsValue({ bookName: value });
+    form.setFieldsValue({ bookId: value });
     setBookId(value);
   };
 
   return (
-    <Form onFinish={onFinish} form={form}>
+    <>
       <Title level={2}>Add Review</Title>
-      <Row>
-        <Col span={12}>
-          <Item
-            name="bookId"
-            label="Book Name"
-            rules={[{ required: true, message: "Please select Book" }]}
-          >
-            <CustomSearch
-              placeholder="Search Book"
-              url="/api/v1/books"
-              style={{ width: 200 }}
-              onOutput={searchOutput}
-            />
-          </Item>
-        </Col>
-      </Row>
-      {bookName && bookName.length > 0 ? (
+      <Form onFinish={onFinish} form={form}>
         <Row>
-          <Col span={18}>
+          <Col span={12}>
             <Item
-              name="title"
-              label="Review Title"
-              rules={[
-                { required: true, message: "Please input Review Title!" },
-              ]}
+              name="bookId"
+              label="Book Name"
+              rules={[{ required: true, message: "Please select Book" }]}
             >
-              <Input placeholder="Title" name="title" />
-            </Item>
-            <Item
-              name="content"
-              rules={[
-                { required: false, message: "Please input Blog Content!" },
-              ]}
-            >
-              <TextEditor
-                name="content"
-                eContent={editorContent}
-                eData={editorsData}
+              <CustomSearch
+                placeholder="Search Book"
+                url="/api/v1/books"
+                style={{ width: 200 }}
+                onOutput={searchOutput}
               />
             </Item>
-            <Button type="primary" htmlType="submit">
-              Submit
-            </Button>
-          </Col>
-          <Col
-            span={6}
-            style={{
-              display: "flex",
-              gap: "3rem",
-              alignItems: "center",
-              flexDirection: "column",
-            }}
-            hidden={!bookName}
-          >
-            <>
-              <ThreeDBook bookName={bookName} featureImage={""} />
-              <Item
-                name="rating"
-                rules={[
-                  { required: false, message: "Please input Blog Content!" },
-                ]}
-              >
-                <Rate />
-              </Item>
-              <Item
-                name="recommand"
-                rules={[
-                  { required: false, message: "Please input Blog Content!" },
-                ]}
-              >
-                <Group defaultValue={true} buttonStyle="solid">
-                  <Radio.Button value={true}>Recommanded</Radio.Button>
-                  <Radio.Button value={false}>Nahh, Read Another</Radio.Button>
-                </Group>
-              </Item>
-            </>
           </Col>
         </Row>
-      ) : null}
-    </Form>
+        {bookName && bookName.length > 0 ? (
+          <Row>
+            <Col span={18}>
+              <Item
+                name="title"
+                label="Review Title"
+                rules={[
+                  { required: true, message: "Please input Review Title!" },
+                ]}
+              >
+                <Input placeholder="Title" name="title" />
+              </Item>
+              <Item
+                name="content"
+                rules={[
+                  { required: false, message: "Please input Blog Content!" },
+                ]}
+              >
+                <TextEditor
+                  name="content"
+                  eContent={editorContent}
+                  eData={editorsData}
+                />
+              </Item>
+              <Button type="primary" htmlType="submit">
+                Submit
+              </Button>
+            </Col>
+            <Col
+              span={6}
+              style={{
+                display: "flex",
+                gap: "3rem",
+                alignItems: "center",
+                flexDirection: "column",
+              }}
+              hidden={!bookName}
+            >
+              <>
+                <ThreeDBook bookName={bookName} featureImage={""} />
+                <Item
+                  name="rating"
+                  rules={[{ required: true, message: "Input Rating" }]}
+                >
+                  <Rate
+                    onChange={(v) =>
+                      form.setFieldsValue({
+                        rating: v,
+                      })
+                    }
+                  />
+                </Item>
+                <Item
+                  name="recommended"
+                  rules={[
+                    { required: false, message: "Add your recommendation" },
+                  ]}
+                >
+                  <Group buttonStyle="solid">
+                    <Radio.Button value={true}>Recommended</Radio.Button>
+                    <Radio.Button value={false}>
+                      Nahh! Not Recommended
+                    </Radio.Button>
+                  </Group>
+                </Item>
+              </>
+            </Col>
+          </Row>
+        ) : null}
+      </Form>
+    </>
   );
 };

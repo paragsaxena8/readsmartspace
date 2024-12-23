@@ -56,6 +56,7 @@ export const Auth: FC = () => {
 
         localStorage.setItem("user", JSON.stringify(res.data.user));
         localStorage.setItem("token", res.data.token);
+        localStorage.setItem("userId", res.data.user._id);
         // Redirect to dashboard
         navigate("/dashboard");
       })
@@ -63,7 +64,6 @@ export const Auth: FC = () => {
         setLoading(false);
         console.log(err);
         messageApi.error(err.response.data.message);
-
       });
   };
 

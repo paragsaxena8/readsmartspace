@@ -17,7 +17,7 @@ export const CustomSearch: React.FC<{
 
   const fetch = (
     value: string,
-    callback: (data: { value: string; text: string }[]) => void
+    callback: (data: { value: string; text: string }[]) => void,
   ) => {
     if (timeout) {
       clearTimeout(timeout);
@@ -65,13 +65,12 @@ export const CustomSearch: React.FC<{
       value={value}
       placeholder={props.placeholder}
       style={props.style}
-      defaultActiveFirstOption={true}
-      onFocus={() => null}
+      defaultActiveFirstOption={false}
       suffixIcon={null}
       filterOption={false}
       onSearch={handleSearch}
       onChange={handleChange}
-      notFoundContent={"No Data"}
+      notFoundContent={null}
       options={(data || []).map((d) => ({
         value: JSON.stringify(d),
         label: d.label,

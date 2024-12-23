@@ -1,20 +1,27 @@
 import { Request, Response, NextFunction } from "express";
 import { BookReview } from "@schema/book-review/book-review.schema";
 import catchAsync from "@utils/catchAsync";
-import { getAll, getOne, updateOne, deleteOne } from "@services/handler.factory";
+import {
+  getAll,
+  getOne,
+  updateOne,
+  deleteOne,
+} from "@services/handler.factory";
 
 export const getAllReviews = getAll(BookReview, {
   exclude: ["__v"],
-  populate: [{
-    path: "bookId",
-    select: "title",
-  }]
+  populate: [
+    {
+      path: "bookId",
+      select: "title",
+    },
+  ],
 });
 
 export const getReview = getOne(BookReview);
 
 export const createReview = catchAsync(
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req: Request, res: Response, _next: NextFunction) => {
     const { bookId, reviewer, rating, reviewText, recommended } = req.body;
 
     const data = await BookReview.create({
@@ -28,7 +35,7 @@ export const createReview = catchAsync(
       status: 201,
       data,
     });
-  }
+  },
 );
 
 export const updateReview = updateOne(BookReview);

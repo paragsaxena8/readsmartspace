@@ -1,4 +1,3 @@
-
 export class APIFeatures {
   query: any;
   queryString: any;

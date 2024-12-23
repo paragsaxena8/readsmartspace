@@ -31,7 +31,7 @@ const sendErrorDev: ErrorRequestHandler = (
   err: any,
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   // A) API
   if (req.originalUrl.startsWith("/api")) {
@@ -55,7 +55,7 @@ const sendErrorProd: ErrorRequestHandler = (
   err,
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   // A) API
   if (req.originalUrl.startsWith("/api")) {
@@ -100,7 +100,7 @@ export const globalErrorHandler: ErrorRequestHandler = (
   err: any,
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   console.log(err);
 

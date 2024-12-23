@@ -13,7 +13,7 @@ export const getBooks = getAll(Book);
 export const getBook = getOne(Book);
 
 export const createBook = catchAsync(
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req: Request, res: Response, _next: NextFunction) => {
     const { title, author, description, rating, published, publisher } =
       req.body;
 
@@ -29,7 +29,7 @@ export const createBook = catchAsync(
       status: 201,
       data,
     });
-  }
+  },
 );
 
 export const updateBook = updateOne(Book);
@@ -37,7 +37,7 @@ export const updateBook = updateOne(Book);
 export const deleteBook = deleteOne(Book);
 
 export const bookSearch = catchAsync(
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req: Request, res: Response, _next: NextFunction) => {
     const { title } = req.query;
 
     if (!title) {
@@ -51,11 +51,11 @@ export const bookSearch = catchAsync(
       {
         title: { $regex: title, $options: "i" },
       },
-      { title: 1 }
+      { title: 1 },
     );
     res.status(200).json({
       status: 200,
       data,
     });
-  }
+  },
 );

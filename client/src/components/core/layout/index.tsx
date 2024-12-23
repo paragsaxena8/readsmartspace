@@ -18,7 +18,6 @@ export const MainLayout: FC = () => {
   };
 
   return (
-
     <Layout>
       <Sidebar />
       <Layout>

@@ -23,7 +23,7 @@ export const Sidebar = () => {
     label: React.ReactNode,
     key: any,
     children?: MenuItem[],
-    icon?: React.ReactNode
+    icon?: React.ReactNode,
   ): MenuItem {
     return {
       key,
@@ -36,7 +36,7 @@ export const Sidebar = () => {
   function toTitleAndLink({ id, path }: { id: string; path: string }) {
     const label = id.replace(
       /\w\S*/g,
-      (text) => text.charAt(0).toUpperCase() + text.substring(1).toLowerCase()
+      (text) => text.charAt(0).toUpperCase() + text.substring(1).toLowerCase(),
     );
     if (path) {
       return (
@@ -51,11 +51,12 @@ export const Sidebar = () => {
   const prepareMenuItems = (arr: any[]): MenuItem[] | any => {
     return arr && arr.length > 0
       ? arr.map((r) => {
+        if(r.show === false) return null;
           return getItem(
             toTitleAndLink(r),
             r.id,
             prepareMenuItems(r.children),
-            <XFilled />
+            <XFilled />,
           );
         })
       : null;
@@ -71,10 +72,12 @@ export const Sidebar = () => {
       }}
     >
       <img
-        src="https://placehold.co/180x40"
+        src="/src/assets/img/logo.svg"
         alt="logo"
         style={{
           margin: "0.5rem",
+          width: "100%",
+          height: "auto",
         }}
       />
       <Menu

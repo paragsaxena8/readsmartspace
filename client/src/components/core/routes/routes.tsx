@@ -1,17 +1,18 @@
 import { createBrowserRouter, Navigate, RouteObject } from "react-router-dom";
-import { Blog } from "../../dashboard/Blog";
-import { Reviews } from "../../dashboard/Reviews";
-import { Journal } from "../../dashboard/Journal";
+import { Blog } from "../../dashboard/blog";
+import { Reviews } from "../../dashboard/reviews";
+import { Journal } from "../../dashboard/journal";
 import { Dashboard } from "../../dashboard/dashboard";
 import { MainLayout } from "../layout";
-import { CreateBlog } from "../../dashboard/Blog/create-blog";
-import { CreateReview } from "../../dashboard/Reviews/create-review";
-import { CreateJournal } from "../../dashboard/Journal/create-journal";
+import { CreateBlog } from "../../dashboard/blog/create-blog";
+import { CreateReview } from "../../dashboard/reviews/create-review";
+import { CreateJournal } from "../../dashboard/journal/create-journal";
 import { Auth } from "../../pages/Auth/Auth";
 import { AuthProvider } from "../../../utils/context/AuthContext";
 import { ThemeProvider } from "../../../utils/context/ThemeContext";
 import { ActivateAccount } from "../../pages/Auth/Activate-Account";
-import { Settings } from "../../dashboard/Settings";
+import { Settings } from "../../dashboard/settings";
+import { ViewEditBlog } from "../../dashboard/blog/crud";
 
 function ProtectedRoute(props: any) {
   const token = localStorage.getItem("token");
@@ -23,7 +24,7 @@ function ProtectedRoute(props: any) {
   return props.children;
 }
 
-export const routesArray: RouteObject[] = [
+export const routesArray: RouteObject[] | any[] = [
   {
     id: "Dashboard",
     path: "/dashboard",
@@ -42,6 +43,18 @@ export const routesArray: RouteObject[] = [
         path: "/create-blog",
         element: <CreateBlog />,
       },
+      {
+        id: "Edit Blog",
+        path: "/edit-blog/:id",
+        element: <ViewEditBlog />,
+        show: false
+      },
+      {
+        id: "View Blog",
+        path: "/view-blog/:id",
+        element: <ViewEditBlog />,
+        show: false
+      }
     ],
   },
   {

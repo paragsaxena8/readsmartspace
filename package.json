@@ -6,7 +6,8 @@
   "scripts": {
     "client": "cd client && npm run dev",
     "server": "cd server && npm start",
-    "dev": "concurrently \"npm run server\" \"npm run client\""
+    "start": "concurrently \"npm run server\" \"npm run client\"",
+    "pretify": "prettier --write \"client/**/*.ts\" \"server/**/*.ts\""
   },
   "keywords": [],
   "author": "",

@@ -1,6 +1,11 @@
 import { Router } from "express";
-import { createJournal, deleteJournal, getAllJournals, getJournal, updateJournal } from "@controllers/journal/journal.controller";
-
+import {
+  createJournal,
+  deleteJournal,
+  getAllJournals,
+  getJournal,
+  updateJournal,
+} from "@controllers/journal/journal.controller";
 
 export const journalRoutes = Router();
 

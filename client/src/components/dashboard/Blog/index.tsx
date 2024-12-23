@@ -1,16 +1,29 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Typography, Card, Col, Row, Select, Table, Skeleton } from "antd";
+import {
+  Typography,
+  Card,
+  Col,
+  Row,
+  Select,
+  Skeleton,
+  Divider,
+  Avatar,
+  Button,
+} from "antd";
+import { useNavigate } from "react-router-dom";
 
 const { Title } = Typography;
+const { Meta } = Card;
 
 export const Blog = () => {
   const [blogs, setBlogs] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [view, setView] = useState("list");
-  const [dataSource, setDataSource] = useState<any[]>([]);
-  const [columns, setColumns] = useState<any[]>([]);
-
+  const navigate = useNavigate();
+  const convertDate = (date:Date) => {
+    return new Date(date).toLocaleString();
+  };
   useEffect(() => {
     (async () => {
       try {
@@ -25,77 +38,11 @@ export const Blog = () => {
     })();
   }, []);
 
-  useEffect(() => {
-    if (view === "list") {
-      setColumns([
-        {
-          title: "Title",
-          dataIndex: "title",
-          key: "title",
-        },
-        {
-          title: "Content",
-          dataIndex: "content",
-          key: "content",
-          responsive: ["md"],
-        },
-        {
-          title: "Created At",
-          dataIndex: "createdAt",
-          key: "createdAt",
-          render: (_: any, { createdAt }: { createdAt: string }) => (
-            <p>{new Date(createdAt).toDateString()}</p>
-          ),
-        },
-        {
-          title: "Status",
-          dataIndex: "status",
-          key: "status",
-          render: (_: any, { status }: { status: string }) => (
-            <>
-              <span
-                style={{
-                  color: status === "public" ? "green" : "red",
-                }}
-              >
-                {status === "public" ? "Published" : "Draft"}
-              </span>
-            </>
-          ),
-        },
-        {
-          title: "Action",
-          key: "action",
-          render: () => (
-            <Select
-              defaultValue="Actions"
-              style={{ width: "90px" }}
-              options={[
-                { value: "edit", label: "Edit" },
-                { value: "delete", label: "Delete" },
-              ]}
-            />
-          ),
-        },
-      ]);
-
-      setDataSource(
-        blogs.map((blog) => ({
-          key: blog._id,
-          title: blog.title,
-          content: blog.excerpt,
-          createdAt: blog.createdAt,
-          status: blog.status,
-        }))
-      );
-    }
-  }, [view, blogs]);
-
   return (
     <div>
       <Title>My Blogs</Title>
-      <Row>
-        <Col span={4} style={{ marginLeft: "auto" }}>
+      <Row >
+        <Col span={2} style={{ marginLeft: "auto", marginRight: '1.5rem'  }}>
           <Select
             defaultValue="list"
             style={{ width: 120 }}
@@ -106,26 +53,90 @@ export const Blog = () => {
             ]}
           />
         </Col>
+        <Col span={2}>
+          <Button type="primary" onClick={() => navigate("/create-blog")}>Create Blog</Button>
+        </Col>
       </Row>
+      <Divider />
       <Skeleton loading={loading} />
       <Row
         style={{
           marginTop: "20px",
         }}
       >
-        {view === "grid" ? (
-          <>
-            {blogs.map((blog) => (
-              <Col span={8} key={blog._id}>
-                <Card title={blog.title}>
-                  <p>{blog.excerpt}</p>
+        <div
+          className="blogs"
+          style={
+            view === "grid"
+              ? {
+                  display: "grid",
+                  gridTemplateColumns: "repeat(3, 1fr)",
+                  gap: "20px",
+                }
+              : {}
+          }
+        >
+          {blogs.map((blog) => {
+            // Add the following code snippet
+            if (view === "grid") {
+              return (
+                <Card
+                  key={blog._id}
+                  hoverable
+                  style={{ width: "auto" }}
+                  cover={
+                    <img alt="example" src="https://via.placeholder.com/30" />
+                  }
+                >
+                  <div
+                    style={{
+                      minHeight: "4.5rem",
+                    }}
+                  >
+                    <Meta title={blog.title} description={blog.excerpt} />
+                  </div>
+                  <Divider />
+                  <Meta
+                    avatar={<Avatar src="https://via.placeholder.com/30" />}
+                    title={blog.author ? blog.author.name : ""}
+                    description="Published on Sept 02, 2024"
+                  />
                 </Card>
-              </Col>
-            ))}
-          </>
-        ) : (
-          <Table dataSource={dataSource} columns={columns} bordered />
-        )}
+              );
+            } else {
+              return (
+                <div className="blog" key={blog._id}>
+                  <div className="blog-header">
+                    <span>
+                      {blog.author
+                        ? blog.author.name
+                          ? blog.author.name
+                          : blog.author
+                        : ""}
+                    </span>
+                  </div>
+                  <div className="blog-body">
+                    <div className="blog-content">
+                      <h2>{blog.title}</h2>
+                      <p>{blog.excerpt}</p>
+                    </div>
+                    <div className="blog-image">
+                      <img src="https://via.placeholder.com/30x30" alt="blog" />
+                    </div>
+                  </div>
+                  <div className="blog-footer">
+                    <span>
+                      <button type="button" onClick={() => navigate(`/edit-blog/${blog._id}`)}>Edit</button>
+                      <button>Delete</button>
+                    </span>
+                    <span>{convertDate(blog.updatedAt)}</span>
+                    <span>{blog.status === 'public' ? 'Published' : 'Draft'}</span>
+                  </div>
+                </div>
+              );
+            }
+          })}
+        </div>
       </Row>
     </div>
   );

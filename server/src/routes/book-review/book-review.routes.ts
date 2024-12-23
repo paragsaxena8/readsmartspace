@@ -1,6 +1,11 @@
 import { Router } from "express";
-import { createReview, deleteReview, getAllReviews, getReview, updateReview } from "@controllers/book-reviews/book-review.controller";
-
+import {
+  createReview,
+  deleteReview,
+  getAllReviews,
+  getReview,
+  updateReview,
+} from "@controllers/book-reviews/book-review.controller";
 
 export const reviewRoutes = Router();
 

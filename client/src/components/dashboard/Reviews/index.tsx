@@ -28,7 +28,9 @@ export const Reviews = () => {
         title: "Review Title",
         dataIndex: "reviewId",
         key: "reviewId",
-        render: (_: any, { reviewId }: { reviewId: any }) => <p>{reviewId.title}</p>,
+        render: (_: any, { reviewId }: { reviewId: any }) => (
+          <p>{reviewId.title}</p>
+        ),
       },
       {
         title: "Rating",
@@ -62,7 +64,7 @@ export const Reviews = () => {
       reviews.map((review) => ({
         key: review._id,
         ...review,
-      }))
+      })),
     );
   }, [reviews]);
 

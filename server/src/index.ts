@@ -1,5 +1,5 @@
 import { connect } from "mongoose";
-import 'dotenv/config';
+import "dotenv/config";
 import express, { json, urlencoded } from "express";
 import cookieParser from "cookie-parser";
 import compression from "compression";
@@ -7,7 +7,11 @@ import morgan from "morgan";
 import cors from "cors";
 
 import { protect } from "./controllers/auth/auth.controller";
-import { blogCategoryRoute, blogRoute } from "./routes/blogs/blog.routes";
+import {
+  blogCategoryRoute,
+  blogRoute,
+  blogTagsRoutes,
+} from "./routes/blogs/blog.routes";
 import { reviewRoutes } from "./routes/book-review/book-review.routes";
 import { journalRoutes } from "./routes/journal/journal.routes";
 import { bookRoutes } from "./routes/book-review/book.routes";
@@ -33,12 +37,13 @@ app.get("/", (_req: any, res: any) => {
   res.end();
 });
 
-app.post('/upload', uploadFile.single('file'), uploadFileFactory);
+app.post("/upload", uploadFile.single("file"), uploadFileFactory);
 
 // Routes
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/blogs", blogRoute);
 app.use("/api/v1/blog-categories", blogCategoryRoute);
+app.use("/api/v1/blog-tags", blogTagsRoutes);
 app.use("/api/v1/books", bookRoutes);
 app.use("/api/v1/book-reviews", reviewRoutes);
 app.use("/api/v1/journals", journalRoutes);

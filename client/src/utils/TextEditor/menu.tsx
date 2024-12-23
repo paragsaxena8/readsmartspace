@@ -1,4 +1,4 @@
-import './editor.scss';
+import "./editor.scss";
 
 export const MenuBar = ({ editor }: { editor: any }) => {
   if (!editor) {
@@ -54,4 +54,3 @@ export const MenuBar = ({ editor }: { editor: any }) => {
     </>
   );
 };
-

@@ -13,34 +13,36 @@ const signToken = (id: any) =>
 
 // Login
 
-export const login = catchAsync(async (req: Request, res: Response, next) => {
-  // Retrieve username and password from request body
-  const { username, password } = req.body;
-  if (!username || !password) {
-    return next(new AppError("Please fill all the fields", 400));
+export const login = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    // Retrieve username and password from request body
+    const { username, password } = req.body;
+    if (!username || !password) {
+      return next(new AppError("Please fill all the fields", 400));
+    }
+
+    const user = await User.findOne({ username }).select("+password");
+
+    if (!user || matchPassword(password, hashPassword(user.password))) {
+      return next(new AppError("Incorrect username or password", 401));
+    } else if (user.status === "inactive") {
+      return next(new AppError("Account not activated", 401));
+    } else if (user.status === "banned") {
+      return next(new AppError("Account banned", 401));
+    }
+
+    // Generate token
+    const token = generateToken(user, res, next);
+
+    // Remove field from response
+    user.password = undefined;
+    user.__v = undefined;
+    user._id = undefined;
+
+    // Example response
+    res.status(200).json({ message: "Login successful", user, token });
   }
-
-  const user = await User.findOne({ username }).select("+password");
-
-  if (!user || matchPassword(password, hashPassword(user.password))) {
-    return next(new AppError("Incorrect username or password", 401));
-  } else if (user.status === "inactive") {
-    return next(new AppError("Account not activated", 401));
-  } else if (user.status === "banned") {
-    return next(new AppError("Account banned", 401));
-  }
-
-  // Generate token
-  const token = generateToken(user, res, next);
-
-  // Remove field from response
-  user.password = undefined;
-  user.__v = undefined;
-  user._id = undefined;
-
-  // Example response
-  res.status(200).json({ message: "Login successful", user, token });
-});
+);
 
 // Register
 export const register = catchAsync(
@@ -84,7 +86,9 @@ export const register = catchAsync(
     await newUser.save({ validateBeforeSave: false });
 
     // send email verification
-    await sendEmailVerification(name,email,activationToken).catch(console.error);
+    await sendEmailVerification(name, email, activationToken).catch(
+      console.error
+    );
 
     // Remove field from response
     newUser.password = undefined;
@@ -92,19 +96,17 @@ export const register = catchAsync(
     newUser.activationToken = undefined;
     newUser.__v = undefined;
 
-    res
-      .status(201)
-      .json({
-        message:
-          "User registered successfully, check you email for activation of your account.",
-        data: newUser,
-      });
+    res.status(201).json({
+      message:
+        "User registered successfully, check you email for activation of your account.",
+      data: newUser,
+    });
   }
 );
 
 // Logout
 export const logout = catchAsync(
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (_req: Request, res: Response, _next: NextFunction) => {
     // Clear cookie
     res.clearCookie("jwt");
     res.status(200).json({ message: "Logout successful" });
@@ -167,7 +169,7 @@ const generateToken = (user: any, res: Response, next: NextFunction) => {
 
 // Send Email Verification
 
-const sendEmailVerification = async (name:string, email: any, token: any) => {
+const sendEmailVerification = async (name: string, email: any, token: any) => {
   // Implement email verification logic here
   const template_details = {
     subject: "Account Verification",
@@ -192,7 +194,7 @@ const sendEmailVerification = async (name:string, email: any, token: any) => {
 
 // Forgot Password
 export const forgotPassword = catchAsync(
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req: Request, _res: Response, next: NextFunction) => {
     // Retrieve email from request body
     const { email } = req.body;
 
@@ -218,7 +220,7 @@ export const forgotPassword = catchAsync(
 // Acctivate Account
 
 export const activateAccount = catchAsync(
-  async (req: Request, res: Response, next) => {
+  async (req: Request, res: Response, next: NextFunction) => {
     const { token } = req.query as any;
 
     // Check if token is present

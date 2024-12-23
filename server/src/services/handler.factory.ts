@@ -9,7 +9,6 @@ export const getAll = (model: Model<any>, options?) => {
     const populateOptions = [];
     let filter = {};
     let query = req.query || {};
-    console.log("🚀 ~ returncatchAsync ~ query:", query);
     if (options) {
       if (options.exclude && options.exclude.length > 0) {
         options.exclude.forEach((field) => {
@@ -34,7 +33,7 @@ export const getAll = (model: Model<any>, options?) => {
 
     const features = new APIFeatures(
       model.find(filter).populate(populateOptions),
-      query
+      query,
     )
       .filter()
       .sort()
@@ -52,16 +51,25 @@ export const getAll = (model: Model<any>, options?) => {
 };
 
 export const getOne = (model: Model<any>, options?) => {
-  return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+  return catchAsync(async (req: Request, res: Response, _next: NextFunction) => {
     console.log(req.params);
-
+    const populateOptions = [];
     let exceptFields = {};
-    if (options && options.exceptFields) {
+    if (options){
+
+      if(options.exceptFields) {
       options.exceptFields.forEach((field) => {
         exceptFields[field] = 0;
       });
     }
-    const data = await model.findById(req.params.id, exceptFields);
+
+    if (options.populate && options.populate.length > 0) {
+      for (const field of options.populate) {
+        populateOptions.push(field);
+      }
+    }
+  }
+    const data = await model.findById(req.params.id, exceptFields).populate(populateOptions)
     res.status(200).json({
       status: 200,
       data,

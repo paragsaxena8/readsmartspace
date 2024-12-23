@@ -46,8 +46,8 @@ export const Topbar = () => {
       key: "account",
       icon: <SettingOutlined />,
       onClick: () => {
-        navigate("/account");
-      }
+        navigate("/settings");
+      },
     },
     {
       type: "divider",

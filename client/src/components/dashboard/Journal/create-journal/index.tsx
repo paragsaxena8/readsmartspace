@@ -13,7 +13,7 @@ export const CreateJournal: FC = () => {
     form.setFieldsValue({
       title: "Test",
       tags: ["tag1", "tag2"],
-      content: editorContent
+      content: editorContent,
     });
   }, [form, editorContent]);
   const editorsData = (data: any) => {
@@ -24,7 +24,6 @@ export const CreateJournal: FC = () => {
   const onFinish = (values: any) => {
     console.log("🚀 ~ values:", values);
   };
-
 
   return (
     <Form onFinish={onFinish} form={form}>
@@ -37,9 +36,7 @@ export const CreateJournal: FC = () => {
           >
             <Input placeholder="Title" name="title" />
           </Item>
-          <Item
-            name="createdAt"
-          >
+          <Item name="createdAt">
             <Input placeholder="createdAt" name="createdAt" />
           </Item>
           <Item

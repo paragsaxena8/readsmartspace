@@ -1,5 +1,4 @@
 import { Schema, model } from "mongoose";
-let SummarizerManager = require("node-summarizer").SummarizerManager;
 
 const blogSchema = new Schema({
   title: {
@@ -13,13 +12,8 @@ const blogSchema = new Schema({
     unique: true,
   },
   content: {
-    type: String,
+    type: Array,
     required: [true, "Content is required"],
-    min: [50, "Content should be at least 50 characters"],
-  },
-  shortSummary: {
-    type: String,
-    max: 20,
   },
   createdAt: {
     type: Date,
@@ -33,13 +27,13 @@ const blogSchema = new Schema({
     type: Buffer,
   },
   categories: {
-    // type: [Schema.Types.ObjectId],
-    // ref: "BlogCategory",
-    type: [String],
+    type: Schema.Types.ObjectId,
+    ref: "BlogCategory",
     required: [true, "Categories is required"],
   },
   tags: {
-    type: [String],
+    type: [Schema.Types.ObjectId],
+    ref: "BlogTags",
     required: [true, "Tags is required"],
   },
   status: {
@@ -48,14 +42,13 @@ const blogSchema = new Schema({
     default: "public",
   },
   author: {
-    // type: Schema.Types.ObjectId,
-    // ref: "User",
-    type: String,
+    // type: String,
+    type: Schema.Types.ObjectId,
+    ref: "User",
     required: [true, "Author is required"],
   },
   excerpt: {
     type: String,
-    required: [true, "Excerpt is required"],
     min: [20, "Excerpt should be at least 20 characters"],
   },
 });
@@ -66,11 +59,6 @@ blogSchema.pre("validate", function (next) {
     typeof this.title === "string"
       ? this.title.split(" ").join("-").toLowerCase()
       : "";
-
-  let Summarizer = new SummarizerManager(this.content, 1);
-  let summary = Summarizer.getSummaryByFrequency().summary;
-  this.excerpt = summary;
-  console.log(summary);
   next();
 });
 

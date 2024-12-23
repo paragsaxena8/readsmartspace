@@ -64,7 +64,7 @@ export const Journal = () => {
       journals.map((journal) => ({
         key: journal._id,
         ...journal,
-      }))
+      })),
     );
   }, [journals]);
 
@@ -85,9 +85,11 @@ export const Journal = () => {
         </Col>
       </Row>
       <Skeleton loading={loading} />
-      <Row style={{
-        marginTop: "20px"
-      }}>
+      <Row
+        style={{
+          marginTop: "20px",
+        }}
+      >
         {view === "grid" ? (
           <>
             {journals.map((journal) => (
